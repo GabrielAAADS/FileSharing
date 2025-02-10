@@ -25,14 +25,14 @@ client_state = {
     "client_port": None,
     "file_server_thread": None,
     "lock": threading.Lock(),
-    "public_folder": "C:\\public"
+    "public_folder": "C:\\public3"
 }
 
 class ConnectRequest(BaseModel):
     server_ip: str
     client_ip: str = "0.0.0.0"
-    client_port: int = 1235
-    public_folder: str = "C:\\public"
+    client_port: int = 1236
+    public_folder: str = "C:\\public3"
 
 class FileRequest(BaseModel):
     filename: str
@@ -546,4 +546,4 @@ def start_file_server(public_folder, client_port):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8002)

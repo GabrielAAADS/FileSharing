@@ -5,9 +5,18 @@ import shutil
 
 from fastapi import FastAPI, HTTPException, status, File, UploadFile
 from pydantic import BaseModel
-
+from typing import List
 
 app = FastAPI()
+
+class DistributedDownloadSource(BaseModel):
+    ip: str
+    port: int
+
+class DistributedDownloadRequest(BaseModel):
+    filename: str
+    filesize: int
+    sources: List[DistributedDownloadSource]
 
 client_state = {
     "connected": False,
@@ -35,6 +44,56 @@ class DownloadRequest(BaseModel):
     filename: str
     offset_start: int = 0
     offset_end: int | None = None
+
+@app.post("/download/distributed")
+async def distributed_download(req: DistributedDownloadRequest):
+    n_sources = len(req.sources)
+    if n_sources == 0:
+        raise HTTPException(status_code=400, detail="Nenhuma fonte selecionada")
+    
+    total_size = req.filesize
+    segment_size = total_size // n_sources
+    remainder = total_size % n_sources
+
+    destination = os.path.join(client_state["public_folder"], req.filename)
+    results = [None] * n_sources
+    threads = []
+    current_offset = 0
+
+    for i, source in enumerate(req.sources):
+        start = current_offset
+
+        if i == n_sources - 1:
+            end = start + segment_size + remainder
+        else:
+            end = start + segment_size
+        current_offset = end
+
+        t = threading.Thread(
+            target=download_segment_thread,
+            args=(source.ip, source.port, req.filename, start, end, results, i)
+        )
+        t.start()
+        threads.append(t)
+    
+    for t in threads:
+        t.join()
+
+    if any(segment is None for segment in results):
+        raise HTTPException(
+            status_code=500,
+            detail="Falha ao baixar um ou mais segmentos."
+        )
+    
+    with open(destination, "wb") as f:
+        for segment in results:
+            f.write(segment)
+
+    return {
+        "message": "Download distribuído concluído com sucesso",
+        "path": destination,
+        "bytes_received": os.path.getsize(destination)
+    }
 
 @app.get("/files")
 async def get_local_files():
@@ -308,6 +367,12 @@ async def upload_file(file: UploadFile = File(...)):
     
     public_folder = client_state["public_folder"]
     destination = os.path.join(public_folder, file.filename)
+
+    if os.path.exists(destination):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Arquivo com esse nome já existe."
+        )
     
     try:
         with open(destination, "wb") as buffer:
@@ -363,6 +428,27 @@ async def remove_file(filename: str):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e)
         )
+    
+def download_segment_thread(ip: str, port: int, filename: str, offset_start: int, offset_end: int, results: list, index: int):
+    segment_data = b""
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as peer_socket:
+        try:
+            peer_socket.settimeout(10)
+            peer_socket.connect((ip, port))
+
+            get_cmd = f"GET {filename} {offset_start} {offset_end}\n"
+            peer_socket.send(get_cmd.encode("utf-8"))
+
+            while True:
+                data = peer_socket.recv(4096)
+                if not data:
+                    break
+                segment_data += data
+        except Exception as e:
+            segment_data = None
+            print(e)
+        results[index] = segment_data
 
 def send_server_command(command: str, expect_confirmation: bool = True):
     if command.startswith("JOIN"):

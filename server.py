@@ -23,7 +23,6 @@ def handle_client(client_socket, client_address):
                     if len(tokens) < 3:
                         client_socket.send("ERROR Invalid JOIN command\n".encode("utf-8"))
                         continue
-                    # Forme o ID composto como "IP:PORTA"
                     client_key = f"{tokens[1]}:{tokens[2]}"
                     all_files[client_key] = []
                     client_socket.send("CONFIRMJOIN\n".encode("utf-8"))
@@ -38,8 +37,6 @@ def handle_client(client_socket, client_address):
                 #     print(all_files)
 
                 # Melhoria: confirmar envio dos arquivos ao iniciar conexão (FRONT)
-
-                # Melhoria: adicionar arquivos individualmente
 
                 elif message.startswith("CREATEFILE OVERRIDE"):
                     _, _, filename, size = message.split()
@@ -68,7 +65,6 @@ def handle_client(client_socket, client_address):
                         add_files(client_socket, client_key, filename, size)
 
                 # Melhoria: remoção do arquivo na pasta public deleta arquivo de all_files (ou quando arquivo não for encontrado)
-                # Melhoria: remover arquivos individualmente
                 elif message.startswith("DELETEFILE"):
                     _, filename = message.split()
                     all_files[client_key] = [f for f in all_files[client_key] if f["filename"] != filename]
