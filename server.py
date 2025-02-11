@@ -1,7 +1,6 @@
 import socket
 import threading
 
-
 all_files = {}  
 
 def handle_client(client_socket, client_address):
@@ -127,7 +126,7 @@ def add_files(client_socket, ip_address, filename, size):
 
 def start_server():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(("0.0.0.0", 1234))
+    server_socket.bind(("127.0.0.1", 1234))
     server_socket.listen(5)
     print("Servidor escutando na porta 1234...")
 

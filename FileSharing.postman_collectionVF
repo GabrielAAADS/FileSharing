@@ -88,7 +88,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"server_ip\": \"127.0.0.1\",\r\n    \"client_ip\": \"0.0.0.0\",\r\n    \"client_port\": \"1237\",\r\n    \"public_folder\": \"C:\\\\public3\"\r\n}",
+					"raw": "{\r\n    \"server_ip\": \"127.0.0.1\",\r\n    \"client_ip\": \"127.0.0.1\",\r\n    \"client_port\": \"1237\",\r\n    \"public_folder\": \"C:\\\\public3\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -96,7 +96,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://0.0.0.0:8002/connect",
+					"raw": "http://127.0.0.1:8002/connect",
 					"protocol": "http",
 					"host": [
 						"0",
@@ -130,7 +130,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://0.0.0.0:8001/download/distributed",
+					"raw": "http://127.0.0.1:8001/download/distributed",
 					"protocol": "http",
 					"host": [
 						"0",
