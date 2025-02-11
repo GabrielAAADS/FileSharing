@@ -31,15 +31,17 @@ function DisconnectServer() {
 
   return (
     <div className="container">
-      <h1>Desconectar cliente do servidor</h1>
-      <p>Selecione qual cliente deseja desconectar</p>
-      <select value={id+1} onChange={v => setId(v.target.value - 1)}>
-        <option value={0}>Selecione o cliente</option>
-        <option value={1}>Cliente 1</option>
-        <option value={2}>Cliente 2</option>
-        <option value={3}>Cliente 3</option>
-      </select>
-      <button onClick={() => handleDisconnect()}>Desconectar</button>
+      <div className="subcontainer">
+        <h1>Desconectar cliente do servidor</h1>
+        <p>Selecione qual cliente deseja desconectar</p>
+        <select value={id+1} onChange={v => setId(v.target.value - 1)}>
+          <option value={0}>Selecione o cliente</option>
+          <option value={1}>Cliente 1</option>
+          <option value={2}>Cliente 2</option>
+          <option value={3}>Cliente 3</option>
+        </select>
+        <button onClick={() => handleDisconnect()}>Desconectar</button>
+      </div>
     </div>
   );
 }

@@ -28,31 +28,33 @@ function SearchByPattern() {
 
   return (
     <div className="container">
-      <h1>Buscar arquivos por pattern</h1>
+      <div className="subcontainer">
+        <h1>Buscar arquivos por pattern</h1>
 
-      <p>Selecione um cliente</p>
-      <select value={id+1} onChange={v => setId(v.target.value - 1)}>
-        <option value={0}>Selecione o cliente</option>
-        <option value={1}>Cliente 1</option>
-        <option value={2}>Cliente 2</option>
-        <option value={3}>Cliente 3</option>
-      </select>
+        <p>Selecione um cliente</p>
+        <select value={id+1} onChange={v => setId(v.target.value - 1)}>
+          <option value={0}>Selecione o cliente</option>
+          <option value={1}>Cliente 1</option>
+          <option value={2}>Cliente 2</option>
+          <option value={3}>Cliente 3</option>
+        </select>
 
-      <p>Digite o pattern</p>
-      <input placeholder="pattern" value={pattern} onChange={ev => setPattern(ev.target.value)} />
-      
-      <button onClick={() => handleSearch()}>Buscar</button>
+        <p>Digite o pattern</p>
+        <input placeholder="pattern" value={pattern} onChange={ev => setPattern(ev.target.value)} />
+        
+        <button onClick={() => handleSearch()}>Buscar</button>
 
-      <div style={{flexDirection: "column"}}>
-        {data.map(v => {
-          return (
-            <div className="card">
-              <p>Nome do arquivo: {v.filename}</p>
-              <p>Porta do cliente portador: {v.port}</p>
-              <p>Tamanho do arquivo: {v.size}</p>
-            </div>
-          );
-        })}
+        <div style={{flexDirection: "column"}}>
+          {data.map(v => {
+            return (
+              <div className="card">
+                <p>Nome do arquivo: {v.filename}</p>
+                <p>Porta do cliente portador: {v.port}</p>
+                <p>Tamanho do arquivo: {v.size}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

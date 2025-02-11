@@ -27,25 +27,27 @@ function SearchAllFiles() {
 
   return (
     <div className="container">
-      <h1>Todos os Arquivos</h1>
-      <p>Selecione um cliente</p>
-      <select value={id+1} onChange={v => setId(v.target.value - 1)}>
-        <option value={0}>Selecione o cliente</option>
-        <option value={1}>Cliente 1</option>
-        <option value={2}>Cliente 2</option>
-        <option value={3}>Cliente 3</option>
-      </select>
-      <button onClick={() => handleSearch()}>Buscar</button>
-      <div style={{flexDirection: "column"}}>
-        {data.map(v => {
-          return (
-            <div className="card">
-              <p>Nome do arquivo: {v.filename}</p>
-              <p>Porta do cliente portador: {v.port}</p>
-              <p>Tamanho do arquivo: {v.size}</p>
-            </div>
-          );
-        })}
+      <div className="subcontainer">
+        <h1>Todos os Arquivos</h1>
+        <p>Selecione um cliente</p>
+        <select value={id+1} onChange={v => setId(v.target.value - 1)}>
+          <option value={0}>Selecione o cliente</option>
+          <option value={1}>Cliente 1</option>
+          <option value={2}>Cliente 2</option>
+          <option value={3}>Cliente 3</option>
+        </select>
+        <button onClick={() => handleSearch()}>Buscar</button>
+        <div style={{flexDirection: "column"}}>
+          {data.map(v => {
+            return (
+              <div className="card">
+                <p>Nome do arquivo: {v.filename}</p>
+                <p>Porta do cliente portador: {v.port}</p>
+                <p>Tamanho do arquivo: {v.size}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -41,18 +41,20 @@ function Add() {
 
   return (
     <div className="container">
-      <h1>Conectar cliente ao servidor</h1>
-      <p>Selecione qual cliente deseja conectar</p>
-      <select value={id+1} onChange={v => setId(v.target.value - 1)}>
-        <option value={0}>Selecione o cliente</option>
-        <option value={1}>Cliente 1</option>
-        <option value={2}>Cliente 2</option>
-        <option value={3}>Cliente 3</option>
-      </select>
-      <p>Selecione o arquivo que deseja adicionar à pasta do cliente</p>
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-      {preview && <img src={preview} alt="Preview" width="100px" />}
-      <button onClick={() => handleConnect()}>Adicionar</button>
+      <div className="subcontainer">
+        <h1>Conectar cliente ao servidor</h1>
+        <p>Selecione qual cliente deseja conectar</p>
+        <select value={id+1} onChange={v => setId(v.target.value - 1)}>
+          <option value={0}>Selecione o cliente</option>
+          <option value={1}>Cliente 1</option>
+          <option value={2}>Cliente 2</option>
+          <option value={3}>Cliente 3</option>
+        </select>
+        <p>Selecione o arquivo que deseja adicionar à pasta do cliente</p>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        {preview && <img src={preview} alt="Preview" width="100px" />}
+        <button onClick={() => handleConnect()}>Adicionar</button>
+      </div>
     </div>
   );
 }

@@ -42,25 +42,27 @@ function SearchFiles() {
 
   return (
     <div className="container">
-      <h1>Arquivos locais {id === -1 ? "" : ` do cliente ${id+1}`}</h1>
-      <p>Selecione um cliente</p>
-      <select value={id+1} onChange={v => setId(v.target.value - 1)}>
-        <option value={0}>Selecione o cliente</option>
-        <option value={1}>Cliente 1</option>
-        <option value={2}>Cliente 2</option>
-        <option value={3}>Cliente 3</option>
-      </select>
-      <button onClick={() => handleSearch()}>Buscar</button>
-      <div style={{flexDirection: "column"}}>
-        {data.map(v => {
-          return (
-            <div className="card" style={{flexDirection: "column"}}>
-              <p>Nome do arquivo: {v.filename}</p>
-              <p>Tamanho do arquivo: {v.size}</p>
-              <p style={{textDecoration: "underline", color: "red", cursor: "pointer"}} onClick={() => handleDelete(v.filename)}>Excluir</p>
-            </div>
-          );
-        })}
+      <div className="subcontainer">
+        <h1>Arquivos locais {id === -1 ? "" : ` do cliente ${id+1}`}</h1>
+        <p>Selecione um cliente</p>
+        <select value={id+1} onChange={v => setId(v.target.value - 1)}>
+          <option value={0}>Selecione o cliente</option>
+          <option value={1}>Cliente 1</option>
+          <option value={2}>Cliente 2</option>
+          <option value={3}>Cliente 3</option>
+        </select>
+        <button onClick={() => handleSearch()}>Buscar</button>
+        <div style={{flexDirection: "column"}}>
+          {data.map(v => {
+            return (
+              <div className="card" style={{flexDirection: "column"}}>
+                <p>Nome do arquivo: {v.filename}</p>
+                <p>Tamanho do arquivo: {v.size}</p>
+                <p style={{textDecoration: "underline", color: "red", cursor: "pointer"}} onClick={() => handleDelete(v.filename)}>Excluir</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
