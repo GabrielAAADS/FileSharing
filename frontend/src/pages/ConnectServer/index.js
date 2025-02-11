@@ -27,7 +27,7 @@ function ConnectServer() {
     })
     .catch(err => {
       console.log("ERROR");
-      alert(err.response.data?.detail ?? "Ocorreu um erro ao tentar estabelecer a conexão")
+      alert(err.response?.data?.detail ?? "Ocorreu um erro ao tentar estabelecer a conexão")
     });
   };
 
