@@ -8,6 +8,7 @@ import SearchFiles from './pages/SearchFiles';
 import SearchByPattern from './pages/SearchByPattern';
 import Home from './pages/Home';
 import DownloadFileDistributed from './pages/DownloadFileDistributed';
+import Add from './pages/Add';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="connect" element={<ConnectServer />} />
         <Route path="disconnect" element={<DisconnectServer />} />
+        <Route path="add" element={<Add />} />
         <Route path="download" element={<DownloadFile />} />
         <Route path="downloadDistributed" element={<DownloadFileDistributed />} />
         <Route path="searchall" element={<SearchAllFiles />} />
