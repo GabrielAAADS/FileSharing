@@ -2,12 +2,18 @@ import socket
 import os
 import threading
 import shutil
+import time
+import hashlib
+import logging
 
+from fastapi.responses import JSONResponse
 from fastapi import FastAPI, HTTPException, status, File, UploadFile
 from pydantic import BaseModel
 from typing import List
 
 app = FastAPI()
+
+start_time = time.time()
 
 class DistributedDownloadSource(BaseModel):
     ip: str
@@ -45,6 +51,54 @@ class DownloadRequest(BaseModel):
     offset_start: int = 0
     offset_end: int | None = None
 
+@app.get("/status")
+def get_status():
+    uptime = time.time() - start_time
+
+    try:
+        file_count = len(os.listdir(client_state["public_folder"]))
+    except Exception:
+        file_count = 0
+
+    return {
+        "uptime_seconds": uptime,
+        "connected": client_state["connected"],
+        "server_ip": client_state["server_ip"],
+        "client_port": client_state["client_port"],
+        "public_folder": client_state["public_folder"],
+        "files_up_to_share": file_count
+    }
+
+@app.get("/file/{filename}")
+def get_file_metadata(filename: str):
+
+    public_folder = client_state["public_folder"]
+    file_path = os.path.join(public_folder, filename)
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Arquivo não encontrado")
+
+    try:
+        stat_info = os.stat(file_path)
+        metadata = {
+            "filename": filename,
+            "size_bytes": stat_info.st_size,
+            "creation_time": time.ctime(stat_info.st_ctime),
+            "modification_time": time.ctime(stat_info.st_mtime),
+            "md5": compute_md5(file_path) 
+        }
+        return JSONResponse(content=metadata)
+    except Exception as e:
+        logging.error(f"Erro ao obter metadados do arquivo {filename}: {e}")
+        raise HTTPException(status_code=500, detail="Erro interno ao obter metadados")
+    
+def compute_md5(file_path: str, chunk_size: int = 4096) -> str:
+    md5_hash = hashlib.md5()
+    with open(file_path, 'rb') as f:
+        for chunk in iter(lambda: f.read(chunk_size), b''):
+            md5_hash.update(chunk)
+    return md5_hash.hexdigest()
+
 @app.post("/download/distributed")
 async def distributed_download(req: DistributedDownloadRequest):
     n_sources = len(req.sources)
@@ -60,6 +114,7 @@ async def distributed_download(req: DistributedDownloadRequest):
     threads = []
     current_offset = 0
 
+    segment_ranges = []
     for i, source in enumerate(req.sources):
         start = current_offset
 
@@ -67,6 +122,7 @@ async def distributed_download(req: DistributedDownloadRequest):
             end = start + segment_size + remainder
         else:
             end = start + segment_size
+        segment_ranges.append((start, end))
         current_offset = end
 
         t = threading.Thread(
@@ -89,10 +145,25 @@ async def distributed_download(req: DistributedDownloadRequest):
         for segment in results:
             f.write(segment)
 
+    segments_info = []
+    for i, source in enumerate(req.sources):
+        start, end = segment_ranges[i]
+        segment_data = results[i]
+        bytes_received = len(segment_data) if segment_data is not None else 0
+        segments_info.append({
+            "ip": source.ip,
+            "port": source.port,
+            "offset_start": start,
+            "offset_end": end,
+            "bytes_expected": end - start,
+            "bytes_received": bytes_received
+        })
+
     return {
         "message": "Download distribuído concluído com sucesso",
         "path": destination,
-        "bytes_received": os.path.getsize(destination)
+        "bytes_received": os.path.getsize(destination),
+        "segments_info": segments_info
     }
 
 @app.get("/files")
