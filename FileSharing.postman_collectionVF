@@ -1,0 +1,319 @@
+{
+	"info": {
+		"_postman_id": "b0387e45-1e38-47d4-8eab-15993c4691f2",
+		"name": "FileSharing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28097298"
+	},
+	"item": [
+		{
+			"name": "Buscar arquivos locais",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/files",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"files"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar arquivos por pattern",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8001/search?pattern=whatevergame.png",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "pattern",
+							"value": "whatevergame.png"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar todos os arquivos",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Conectar ao servidor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"server_ip\": \"127.0.0.1\",\r\n    \"client_ip\": \"0.0.0.0\",\r\n    \"client_port\": \"1237\",\r\n    \"public_folder\": \"C:\\\\public3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:8002/connect",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8002",
+					"path": [
+						"connect"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Arquivos Distribuídos",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"filename\": \"whatevergame.png\",\r\n  \"filesize\": 426099,\r\n  \"sources\": [\r\n    {\"ip\": \"127.0.0.1\", \"port\": 1235},\r\n    {\"ip\": \"127.0.0.1\", \"port\": 1236}\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:8001/download/distributed",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8001",
+					"path": [
+						"download",
+						"distributed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar arquivos",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"server_ip\": \"127.0.0.1\",\r\n    \"client_port\": \"1236\",\r\n    \"public_folder\": \"C:\\\\public2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/refresh?override=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"refresh"
+					],
+					"query": [
+						{
+							"key": "override",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Adicionar arquivo",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/gabri/Downloads/atividade.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Baixar Arquivos",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ip\": \"127.0.0.1\",\r\n    \"port\": \"1235\",\r\n    \"filename\": \"whatevergame.png\", \r\n    \"offset_start\": 0,\r\n    \"offset_end\": 1024\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/download",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"download"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Desconectar do Servidor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"server_ip\": \"127.0.0.1\",\r\n    \"client_port\": \"1235\",\r\n    \"public_folder\": \"C:\\\\public\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/leave",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"leave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remover arquivo",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ip\": \"127.0.0.1\",\r\n    \"port\": \"1235\",\r\n    \"filename\": \"whatevergame.png\", \r\n    \"offset_start\": 0,\r\n    \"offset_end\": 1024\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/remove?filename=atividade.pdf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"remove"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "atividade.pdf"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
