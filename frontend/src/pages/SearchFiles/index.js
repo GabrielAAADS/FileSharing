@@ -25,6 +25,21 @@ function SearchFiles() {
     });
   };
 
+  const handleDelete = async(filename) => {
+    await axios.delete(`http://localhost:${8000 + id}/remove?filename=${filename}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(() => {
+      alert(`Arquivo com nome "${filename}" removido com sucesso`);
+      handleSearch();
+    })
+    .catch(err => {
+      console.log("ERROR");
+      alert(err.response.data?.detail ?? "Ocorreu um erro ao tentar remover o arquivo")
+    });
+  };
+
   return (
     <div className="container">
       <h1>Arquivos locais {id === -1 ? "" : ` do cliente ${id+1}`}</h1>
@@ -36,12 +51,13 @@ function SearchFiles() {
         <option value={3}>Cliente 3</option>
       </select>
       <button onClick={() => handleSearch()}>Buscar</button>
-      <div>
+      <div style={{flexDirection: "column"}}>
         {data.map(v => {
           return (
-            <div className="card">
+            <div className="card" style={{flexDirection: "column"}}>
               <p>Nome do arquivo: {v.filename}</p>
               <p>Tamanho do arquivo: {v.size}</p>
+              <p style={{textDecoration: "underline", color: "red", cursor: "pointer"}} onClick={() => handleDelete(v.filename)}>Excluir</p>
             </div>
           );
         })}
