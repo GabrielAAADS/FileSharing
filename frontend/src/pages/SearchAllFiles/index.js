@@ -36,7 +36,7 @@ function SearchAllFiles() {
         <option value={3}>Cliente 3</option>
       </select>
       <button onClick={() => handleSearch()}>Buscar</button>
-      <div>
+      <div style={{flexDirection: "column"}}>
         {data.map(v => {
           return (
             <div className="card">
