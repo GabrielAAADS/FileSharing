@@ -28,15 +28,6 @@ def handle_client(client_socket, client_address):
                     print("JOIN")
                     print(all_files)
 
-                # if message.startswith("JOIN"):
-                #     ip_address = message.split()[1]
-                #     all_files[ip_address] = []
-                #     client_socket.send("CONFIRMJOIN\n".encode("utf-8"))
-                #     print("JOIN")
-                #     print(all_files)
-
-                # Melhoria: confirmar envio dos arquivos ao iniciar conexão (FRONT)
-
                 elif message.startswith("CREATEFILE OVERRIDE"):
                     _, _, filename, size = message.split()
                     size = int(size)
@@ -59,11 +50,9 @@ def handle_client(client_socket, client_address):
 
                     if any(f["filename"] == filename for f in all_files[client_key]):
                         client_socket.send(f"ERROR File {filename} already exists\n".encode("utf-8"))
-                        # Melhoria: substituir o arquivo como opção
                     else:
                         add_files(client_socket, client_key, filename, size)
 
-                # Melhoria: remoção do arquivo na pasta public deleta arquivo de all_files (ou quando arquivo não for encontrado)
                 elif message.startswith("DELETEFILE"):
                     _, filename = message.split()
                     all_files[client_key] = [f for f in all_files[client_key] if f["filename"] != filename]
