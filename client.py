@@ -16,10 +16,10 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Permite chamadas apenas do frontend
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
-    allow_methods=["*"],  # Permite todos os métodos (GET, POST, PUT, DELETE)
-    allow_headers=["*"],  # Permite todos os headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 start_time = time.time()
@@ -241,77 +241,8 @@ async def connect(request: ConnectRequest):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e)
-        )
-  
-# @app.post("/connect")
-# async def connect(request: ConnectRequest):
+        )  
 
-#         validate_already_connected()
-
-#         try:
-#             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#             client_socket.settimeout(10)
-#             client_socket.connect((request.server_ip, 1234))
-            
-#             # client_ip = socket.gethostbyname(socket.gethostname())
-
-#             join_command = f"JOIN {request.client_ip}\n"
-
-#             # client_socket.send(join_cmd.encode())
-
-#             client_state.update({
-#                 "connected": False,
-#                 "client_socket": client_socket,
-#                 "server_ip": request.server_ip,
-#                 "client_port": request.client_port,
-#                 "public_folder": request.public_folder
-#             })
-
-#             response_server = send_server_command(join_command)
-            
-#             # response = client_socket.recv(1024).decode()
-
-#             if "CONFIRMJOIN" not in response_server:
-#                 client_state.update({
-#                     "connected": False,
-#                     "client_socket": None,
-#                     "server_ip": None,
-#                     "client_port": None,
-#                     "lock": threading.Lock(),
-#                     "public_folder": "C:\public"
-#                 })
-#                 raise Exception("Falha ao conectar ao servidor")
-            
-#             client_state.update({
-#                 "connected": True,
-#                 "client_socket": client_socket,
-#                 "server_ip": request.server_ip,
-#                 "client_port": request.client_port,
-#                 "public_folder": request.public_folder
-#             })
-
-#             client_state["file_server_thread"] = threading.Thread(
-#                 target=start_file_server,
-#                 args=(request.public_folder, request.client_port),
-#                 daemon=True
-#             )
-#             client_state["file_server_thread"].start()
-
-#             # Retornar também retorno desse método 
-#             response_refresh = refresh_files()
-
-#             return {"message": "Conectado ao servidor", 
-#                     "response_server": response_server,
-#                     "response_refresh": response_refresh}
-
-#         except Exception as e:
-#             if client_socket:
-#                 client_socket.close()
-#             raise HTTPException(
-#                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-#                 detail=str(e)
-#             )
-        
 @app.get("/search")
 async def search(pattern: str = ""):
     validate_not_connected()
@@ -597,15 +528,6 @@ def start_file_server(public_folder, client_port):
                 
                 try:
                     with open(filepath, "rb") as f:
-                        # file_size = os.path.getsize(filepath)
-                        
-                        # # Validar offsets
-                        # offset_start = max(0, min(offset_start, file_size))
-                        # if offset_end:
-                        #     offset_end = max(offset_start, min(offset_end, file_size))
-                        # else:
-                        #     offset_end = file_size
-                        
                         f.seek(offset_start)
                         data = f.read(offset_end - offset_start) if offset_end else f.read()
                         conn.sendall(data)
