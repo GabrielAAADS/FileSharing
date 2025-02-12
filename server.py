@@ -98,7 +98,6 @@ def handle_client(client_socket, client_address):
                     print(response)
 
                 elif message.startswith("LEAVE"):
-                    print({all_files})
                     del all_files[client_key]
                     client_socket.send("CONFIRMLEAVE\n".encode("utf-8"))
                     print("LEAVE")

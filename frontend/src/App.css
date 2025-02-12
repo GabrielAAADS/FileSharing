@@ -6,6 +6,10 @@
   min-height: 100vh;
 }
 
+h1 {
+  text-align: center;
+}
+
 .subcontainer {
   display: flex;
   flex-direction: column;

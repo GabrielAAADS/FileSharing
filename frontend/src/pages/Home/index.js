@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Home() {
   return (
-    <div className="subcontainer" style={{margin: 30}}>
+    <div className="subcontainer1" style={{margin: 30}}>
       <h1>Home</h1>
       <Link className="card-home" to="/connect">Conectar com o servidor</Link>
       <Link className="card-home" to="/disconnect">Desconectar com o servidor</Link>

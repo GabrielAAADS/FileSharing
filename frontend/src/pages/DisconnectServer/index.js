@@ -11,6 +11,11 @@ function DisconnectServer() {
       alert("Selecione um cliente!");
       return;
     }
+    console.log(`${8000 + id}`, {
+      server_ip: "127.0.0.1",
+      client_port: `${1235 + id}`,
+      public_folder: publicFolders[id]
+    })
     await axios.post(`http://localhost:${8000 + id}/leave`, {
       server_ip: "127.0.0.1",
       client_port: `${1235 + id}`,
@@ -22,8 +27,7 @@ function DisconnectServer() {
     }).then(v => {
       alert("Cliente desconectado com sucesso");
       setId(-1);
-    })
-    .catch(err => {
+    }).catch(err => {
       console.log("ERROR");
       alert(err.response.data?.detail ?? "Ocorreu um erro ao tentar desconectar o cliente")
     });

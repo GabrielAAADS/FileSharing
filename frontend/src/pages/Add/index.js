@@ -30,8 +30,6 @@ function Add() {
     }).then(v => {
       alert("Arquivo adicionado com sucesso!");
       setId(-1);
-      setFile(null);
-      setPreview(null);
     })
     .catch(err => {
       console.log("ERROR");
@@ -42,8 +40,8 @@ function Add() {
   return (
     <div className="container">
       <div className="subcontainer">
-        <h1>Conectar cliente ao servidor</h1>
-        <p>Selecione qual cliente deseja conectar</p>
+        <h1>Adicionar arquivo a uma pasta de um cliente</h1>
+        <p>Selecione o cliente</p>
         <select value={id+1} onChange={v => setId(v.target.value - 1)}>
           <option value={0}>Selecione o cliente</option>
           <option value={1}>Cliente 1</option>

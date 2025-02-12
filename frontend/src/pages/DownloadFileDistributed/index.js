@@ -67,7 +67,7 @@ function DownloadFileDistributed() {
   return (
     <div className="container">
       <div className="subcontainer">
-        <h1>Baixar Arquivos</h1>
+        <h1>Baixar Arquivos de maneira distribuída</h1>
         
         <p>Selecione pra qual cliente você deseja que o download seja feito</p>
         <select value={clientPort} onChange={v => setClientPort(v.target.value)}>
